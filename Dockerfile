@@ -37,4 +37,4 @@ RUN chmod +x /entrypoint.sh
 
 EXPOSE 1234
 
-ENTRYPOINT ["/usr/bin/tini", "--", "/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/tini", "-s", "--", "/entrypoint.sh"]
