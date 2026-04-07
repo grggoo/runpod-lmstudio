@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: grishagrok/llm
+  IMAGE_NAME: ${{ github.repository_owner }}/llm
 
 jobs:
   build-and-push:
