@@ -39,6 +39,13 @@ if [ ! -L /root/.lmstudio ]; then
   ln -s "$LMSTUDIO_HOME_PERSIST" /root/.lmstudio
 fi
 
+# Clean up internal socket and passkey from previous runs
+# to prevent "Invalid passkey" errors during lms load
+echo "[INFO] Cleaning up stale LM Studio passkeys and sockets..."
+rm -rf "$LMSTUDIO_HOME_PERSIST/.internal/passkey" || true
+rm -rf "$LMSTUDIO_HOME_PERSIST/lms-cli-server-"*.sock || true
+rm -rf "$LMSTUDIO_HOME_PERSIST/cli-socket" || true
+
 echo "[INFO] Starting LM Studio daemon..."
 lms daemon up
 sleep 5
