@@ -41,6 +41,7 @@ fi
 
 echo "[INFO] Starting LM Studio daemon..."
 lms daemon up
+sleep 5
 
 if [ "$LINK_ENABLE" = "1" ]; then
   echo "[INFO] Enabling LM Link as '$LINK_DEVICE_NAME' (best-effort, requires prior 'lms login')..."
