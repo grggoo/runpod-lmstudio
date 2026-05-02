@@ -20,6 +20,12 @@ LMSTUDIO_FORCE_REINIT="${LMSTUDIO_FORCE_REINIT:-0}"
 
 mkdir -p /workspace/logs "$MODELS_DIR"
 
+# Fix for potential circular symlinks on the persistent volume from manual interventions
+if [ -L "$LMSTUDIO_HOME_PERSIST" ]; then
+  echo "[INFO] Found symlink at $LMSTUDIO_HOME_PERSIST. Removing it to create a real directory."
+  rm -f "$LMSTUDIO_HOME_PERSIST"
+fi
+
 if [ "$LMSTUDIO_FORCE_REINIT" = "1" ] && [ -d "$LMSTUDIO_HOME_PERSIST" ]; then
   echo "[INFO] LMSTUDIO_FORCE_REINIT=1 -> wiping $LMSTUDIO_HOME_PERSIST"
   rm -rf "$LMSTUDIO_HOME_PERSIST"
