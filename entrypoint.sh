@@ -91,9 +91,15 @@ if [ -n "$MODEL_FILE" ] && [ -f "$MODEL_FILE" ]; then
     lms import --symbolic-link -y --user-repo "$USER_REPO/$BASE" "$MMPROJ_FILE" || true
   fi
 
-  echo "[INFO] Loading $BASE as '$MODEL_IDENTIFIER' (gpu=$GPU_OFFLOAD ctx=$CONTEXT_LENGTH parallel=$PARALLEL ttl=$MODEL_TTL)"
+  ACTUAL_MODEL_KEY=$(lms ls --json | grep -o '"modelKey":"[^"]*"' | head -n 1 | cut -d'"' -f4)
+  if [ -z "$ACTUAL_MODEL_KEY" ]; then
+    echo "[WARN] Could not find imported model key. Falling back to BASE."
+    ACTUAL_MODEL_KEY="$BASE"
+  fi
+
+  echo "[INFO] Loading $ACTUAL_MODEL_KEY as '$MODEL_IDENTIFIER' (gpu=$GPU_OFFLOAD ctx=$CONTEXT_LENGTH parallel=$PARALLEL ttl=$MODEL_TTL)"
   lms unload "$MODEL_IDENTIFIER" >/dev/null 2>&1 || true
-  lms load "$BASE" \
+  lms load "$ACTUAL_MODEL_KEY" \
     --identifier "$MODEL_IDENTIFIER" \
     --gpu "$GPU_OFFLOAD" \
     --context-length "$CONTEXT_LENGTH" \
